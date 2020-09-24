@@ -4,7 +4,6 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:grpc/grpc.dart';
 import 'package:grpc_app/proto/Hello.pbgrpc.dart';
-import 'package:grpc_app/proto/helloworld.pbgrpc.dart';
 
 void main() => runApp(MyApp());
 
@@ -72,13 +71,11 @@ class _MyHomePageState extends State<MyHomePage> {
     _counter += 10;
 
     final stub = LoginServerClient(channel);
-    final stub1 = GreeterClient(channel);
 
     try{
       var response = await stub.login(Request()..username = "xuzhiyong"..age = (20 + _counter));
-      var response1 = await stub1.sayHello(HelloRequest()..name = " zhang de wei");
       setState(() {
-        usrname = response.message + response1.message;
+        usrname = response.message;
       });
 
       print("login info ${response.message}");

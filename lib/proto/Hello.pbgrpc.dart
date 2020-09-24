@@ -9,13 +9,17 @@ import 'dart:async' as $async;
 
 import 'dart:core' as $core;
 
-import 'package:grpc/grpc.dart' as $grpc;
+import 'package:grpc/service_api.dart' as $grpc;
 import 'Hello.pb.dart' as $0;
 export 'Hello.pb.dart';
 
 class LoginServerClient extends $grpc.Client {
   static final _$login = $grpc.ClientMethod<$0.Request, $0.Response>(
       '/LoginServer/login',
+      ($0.Request value) => value.writeToBuffer(),
+      ($core.List<$core.int> value) => $0.Response.fromBuffer(value));
+  static final _$loginout = $grpc.ClientMethod<$0.Request, $0.Response>(
+      '/LoginServer/loginout',
       ($0.Request value) => value.writeToBuffer(),
       ($core.List<$core.int> value) => $0.Response.fromBuffer(value));
 
@@ -25,6 +29,13 @@ class LoginServerClient extends $grpc.Client {
   $grpc.ResponseFuture<$0.Response> login($0.Request request,
       {$grpc.CallOptions options}) {
     final call = $createCall(_$login, $async.Stream.fromIterable([request]),
+        options: options);
+    return $grpc.ResponseFuture(call);
+  }
+
+  $grpc.ResponseFuture<$0.Response> loginout($0.Request request,
+      {$grpc.CallOptions options}) {
+    final call = $createCall(_$loginout, $async.Stream.fromIterable([request]),
         options: options);
     return $grpc.ResponseFuture(call);
   }
@@ -41,6 +52,13 @@ abstract class LoginServerServiceBase extends $grpc.Service {
         false,
         ($core.List<$core.int> value) => $0.Request.fromBuffer(value),
         ($0.Response value) => value.writeToBuffer()));
+    $addMethod($grpc.ServiceMethod<$0.Request, $0.Response>(
+        'loginout',
+        loginout_Pre,
+        false,
+        false,
+        ($core.List<$core.int> value) => $0.Request.fromBuffer(value),
+        ($0.Response value) => value.writeToBuffer()));
   }
 
   $async.Future<$0.Response> login_Pre(
@@ -48,5 +66,12 @@ abstract class LoginServerServiceBase extends $grpc.Service {
     return login(call, await request);
   }
 
+  $async.Future<$0.Response> loginout_Pre(
+      $grpc.ServiceCall call, $async.Future<$0.Request> request) async {
+    return loginout(call, await request);
+  }
+
   $async.Future<$0.Response> login($grpc.ServiceCall call, $0.Request request);
+  $async.Future<$0.Response> loginout(
+      $grpc.ServiceCall call, $0.Request request);
 }
